@@ -75,6 +75,28 @@
       }
     }
 
+    const WEATHER_THEMES = [
+      'theme-thunderstorm', 'theme-drizzle', 'theme-rain',
+      'theme-snow', 'theme-atmosphere', 'theme-clear', 'theme-clouds',
+    ];
+
+    function getTheme(conditionCode) {
+      if (conditionCode >= 200 && conditionCode < 300) return 'theme-thunderstorm';
+      if (conditionCode >= 300 && conditionCode < 400) return 'theme-drizzle';
+      if (conditionCode >= 500 && conditionCode < 600) return 'theme-rain';
+      if (conditionCode >= 600 && conditionCode < 700) return 'theme-snow';
+      if (conditionCode >= 700 && conditionCode < 800) return 'theme-atmosphere';
+      if (conditionCode === 800) return 'theme-clear';
+      if (conditionCode > 800) return 'theme-clouds';
+      return '';
+    }
+
+    function applyTheme(conditionCode) {
+      document.body.classList.remove(...WEATHER_THEMES);
+      const theme = getTheme(conditionCode);
+      if (theme) document.body.classList.add(theme);
+    }
+
     function setVisible(id, visible) {
       const el = document.getElementById(id);
       if (visible) {
@@ -138,6 +160,7 @@
         minute: '2-digit',
       });
 
+      applyTheme(data.condition_code);
       setVisible('weatherCard', true);
     }
 

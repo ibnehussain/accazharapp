@@ -4,9 +4,75 @@
   padding: 0;
 }
 
+/* ── Default theme (night sky) ───────────────────────────────────────────── */
+:root {
+  --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  --accent:       #e94560;
+  --accent-hover: #c73652;
+  --input-border: #0f3460;
+}
+
+/* ── Weather themes ──────────────────────────────────────────────────────── */
+
+/* Thunderstorm (200–299): dark electric purple */
+body.theme-thunderstorm {
+  --bg-gradient:  linear-gradient(135deg, #0d0015 0%, #220040 50%, #150030 100%);
+  --accent:       #c050ff;
+  --accent-hover: #a030e0;
+  --input-border: #3d0070;
+}
+
+/* Drizzle (300–399): soft misty grey-blue */
+body.theme-drizzle {
+  --bg-gradient:  linear-gradient(135deg, #1e2f3e 0%, #2c4255 50%, #3a5570 100%);
+  --accent:       #4a9fc0;
+  --accent-hover: #3a7fa0;
+  --input-border: #2c4255;
+}
+
+/* Rain (500–599): deep rainy indigo */
+body.theme-rain {
+  --bg-gradient:  linear-gradient(135deg, #0f0c29 0%, #1a2a6c 50%, #2d5986 100%);
+  --accent:       #4e9af1;
+  --accent-hover: #2d7dd2;
+  --input-border: #1a2a6c;
+}
+
+/* Snow (600–699): icy blue */
+body.theme-snow {
+  --bg-gradient:  linear-gradient(135deg, #0a1628 0%, #1a3050 50%, #2a4878 100%);
+  --accent:       #3a88cc;
+  --accent-hover: #2a6ab0;
+  --input-border: #1a3050;
+}
+
+/* Atmosphere/fog (700–799): misty grey-green */
+body.theme-atmosphere {
+  --bg-gradient:  linear-gradient(135deg, #1e2825 0%, #2e3d38 50%, #3e524a 100%);
+  --accent:       #4a9870;
+  --accent-hover: #3a7858;
+  --input-border: #2e3d38;
+}
+
+/* Clear sky (800): warm golden */
+body.theme-clear {
+  --bg-gradient:  linear-gradient(135deg, #7f3f00 0%, #c86000 50%, #e8920a 100%);
+  --accent:       #ffb347;
+  --accent-hover: #e89a20;
+  --input-border: #9a5800;
+}
+
+/* Clouds (801–804): cool slate blue */
+body.theme-clouds {
+  --bg-gradient:  linear-gradient(135deg, #1c2841 0%, #2c3e55 50%, #4a627a 100%);
+  --accent:       #3a8fb5;
+  --accent-hover: #2a6f90;
+  --input-border: #2c3e55;
+}
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  background: var(--bg-gradient);
   min-height: 100vh;
   color: #e0e0e0;
   display: flex;
@@ -43,7 +109,7 @@ header p {
 .search-container input {
   flex: 1;
   padding: 14px 20px;
-  border: 2px solid #0f3460;
+  border: 2px solid var(--input-border);
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.08);
   color: #ffffff;
@@ -57,12 +123,12 @@ header p {
 }
 
 .search-container input:focus {
-  border-color: #e94560;
+  border-color: var(--accent);
 }
 
 .search-container button {
   padding: 14px 24px;
-  background: #e94560;
+  background: var(--accent);
   color: #ffffff;
   border: none;
   border-radius: 10px;
@@ -74,7 +140,7 @@ header p {
 }
 
 .search-container button:hover {
-  background: #c73652;
+  background: var(--accent-hover);
 }
 
 .search-container button:active {
@@ -135,7 +201,7 @@ header p {
 .weather-info .temp {
   font-size: 3rem;
   font-weight: 700;
-  color: #e94560;
+  color: var(--accent);
 }
 
 .weather-info .description {
