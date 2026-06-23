@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>&#127780; Weather Dashboard</h1>
+    <p>Enter a city name to get the current weather</p>
+  </header>
+
+  <div class="search-container">
+    <input
+      type="text"
+      id="cityInput"
+      placeholder="Search for a city (e.g. London, Tokyo...)"
+      onkeydown="handleKeyDown(event)"
+    />
+    <button onclick="getWeather()">Get Weather</button>
+  </div>
+
+  <section class="results-section">
+    <h2>Results</h2>
+
+    <p class="placeholder-text" id="placeholder">
+      &#128270; Search for a city to see weather results here.
+    </p>
+
+    <p class="loading" id="loading">Fetching weather data...</p>
+
+    <p class="error-message" id="errorMessage"></p>
+
+    <div class="weather-card" id="weatherCard">
+      <div class="weather-main">
+        <div class="weather-icon" id="weatherIcon">&#9728;&#65039;</div>
+        <div class="weather-info">
+          <h3 id="cityName">--</h3>
+          <div class="temp" id="temperature">--°C</div>
+          <div class="description" id="weatherDescription">--</div>
+        </div>
+      </div>
+      <div class="weather-details">
+        <div class="detail-item">
+          <div class="label">Feels Like</div>
+          <div class="value" id="feelsLike">--</div>
+        </div>
+        <div class="detail-item">
+          <div class="label">Humidity</div>
+          <div class="value" id="humidity">--</div>
+        </div>
+        <div class="detail-item">
+          <div class="label">Wind Speed</div>
+          <div class="value" id="windSpeed">--</div>
+        </div>
+        <div class="detail-item">
+          <div class="label">Visibility</div>
+          <div class="value" id="visibility">--</div>
+        </div>
+        <div class="detail-item">
+          <div class="label">Updated</div>
+          <div class="value" id="lastUpdated">--</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function handleKeyDown(event) {
+      if (event.key === 'Enter') {
+        getWeather();
+      }
+    }
+
+    function setVisible(id, visible) {
+      const el = document.getElementById(id);
+      if (visible) {
+        el.classList.add('visible');
+      } else {
+        el.classList.remove('visible');
+      }
+    }
+
+    function getWeatherIcon(conditionCode) {
+      if (conditionCode >= 200 && conditionCode < 300) return '&#9928;&#65039;';
+      if (conditionCode >= 300 && conditionCode < 400) return '&#127746;';
+      if (conditionCode >= 500 && conditionCode < 600) return '&#127783;&#65039;';
+      if (conditionCode >= 600 && conditionCode < 700) return '&#127784;&#65039;';
+      if (conditionCode >= 700 && conditionCode < 800) return '&#127787;&#65039;';
+      if (conditionCode === 800) return '&#9728;&#65039;';
+      if (conditionCode > 800) return '&#9925;';
+      return '&#127780;';
+    }
+
+    async function getWeather() {
+      const city = document.getElementById('cityInput').value.trim();
+
+      if (!city) {
+        showError('Please enter a city name.');
+        return;
+      }
+
+      document.getElementById('placeholder').style.display = 'none';
+      setVisible('loading', true);
+      setVisible('weatherCard', false);
+      setVisible('errorMessage', false);
+
+      try {
+        const response = await fetch(`/weather?city=${encodeURIComponent(city)}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to fetch weather data. Please try again later.');
+        }
+
+        displayWeather(data);
+      } catch (err) {
+        showError(err.message);
+      } finally {
+        setVisible('loading', false);
+      }
+    }
+
+    function displayWeather(data) {
+      document.getElementById('cityName').textContent = `${data.city}, ${data.country}`;
+      document.getElementById('temperature').textContent = `${Math.round(data.temp)}°C`;
+      document.getElementById('weatherDescription').textContent = data.description;
+      document.getElementById('weatherIcon').innerHTML = getWeatherIcon(data.condition_code);
+      document.getElementById('feelsLike').textContent = `${Math.round(data.feels_like)}°C`;
+      document.getElementById('humidity').textContent = `${data.humidity}%`;
+      document.getElementById('windSpeed').textContent = `${data.wind_speed} m/s`;
+      document.getElementById('visibility').textContent = `${data.visibility} km`;
+      document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+
+      setVisible('weatherCard', true);
+    }
+
+    function showError(message) {
+      document.getElementById('placeholder').style.display = 'none';
+      document.getElementById('errorMessage').textContent = message;
+      setVisible('errorMessage', true);
+      setVisible('weatherCard', false);
+    }
+  </script>
+
+</body>
+</html>
